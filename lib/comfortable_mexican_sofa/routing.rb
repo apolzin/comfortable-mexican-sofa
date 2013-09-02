@@ -50,9 +50,10 @@ module ComfortableMexicanSofa::Routing
             :format       => :xml
         end
         if options[:allow_post]
-          post '/' => :render_html, :as => 'html', :path => "(*cms_path)"
+          match '/' => :render_html, :as => 'html', :path => "(*cms_path)", :via => [:get, :post]
+        else
+          get '/' => :render_html, :as => 'html', :path => "(*cms_path)"
         end
-        get '/' => :render_html, :as => 'html', :path => "(*cms_path)"
       end
     end
   end
