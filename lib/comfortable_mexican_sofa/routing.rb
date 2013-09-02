@@ -1,8 +1,8 @@
 module ComfortableMexicanSofa::Routing
-  
+
   def self.admin(options = {})
     options[:path] ||= 'cms-admin'
-    
+
     Rails.application.routes.draw do
       namespace :cms_admin, :path => options[:path], :except => :show do
         get '/', :to => 'base#jump'
@@ -35,24 +35,26 @@ module ComfortableMexicanSofa::Routing
       end
     end
   end
-  
+
   def self.content(options = {})
-    
+
     Rails.application.routes.draw do
       namespace :cms_content, :path => options[:path] do
         get 'cms-css/:site_id/:identifier' => :render_css,  :as => 'css'
         get 'cms-js/:site_id/:identifier'  => :render_js,   :as => 'js'
-        
+
         if options[:sitemap]
           get '(:cms_path)/sitemap' => :render_sitemap,
             :as           => 'sitemap',
             :constraints  => {:format => /xml/},
             :format       => :xml
         end
-        
+        if options[:allow_post]
+          post '/' => :render_html, :as => 'html', :path => "(*cms_path)"
+        end
         get '/' => :render_html, :as => 'html', :path => "(*cms_path)"
       end
     end
   end
-  
+
 end
